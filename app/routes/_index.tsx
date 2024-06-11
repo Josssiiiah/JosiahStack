@@ -1,69 +1,87 @@
-import { json, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
-import { doTheAuthThing } from "lib/authThing";
-
-// Let's also protect this route and conditionally render either signup or logout
-export async function loader({ request, context }: LoaderFunctionArgs) {
-  const { user, session } = await doTheAuthThing({ request, context });
-  if (user) {
-    const userId = user.id;
-    console.log("LOGGED IN!!");
-  } else {
-    console.log("NOT LOGGED IN!!");
-  }
-
-  return json({
-    user,
-  });
-}
+import { Link } from "@remix-run/react";
 
 export default function Index() {
-  const { user } = useLoaderData<typeof loader>();
-
   return (
-    <div className="min-h-screen max-w-[1440px] mx-auto px-4 flex flex-col items-center text-gray-800">
-      <div className="flex flex-row justify-between pt-8 w-full">
-        <Link to="/">
-          <h2 className="font-bold text-lg">Peer Profiles</h2>
-        </Link>
-        <div>
-          {user ? (
-            <Link
-              to="/logout"
-              className="px-4 py-2 rounded bg-red-500 text-white font-medium hover:bg-red-600"
-            >
-              Logout
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="px-4 py-2 rounded bg-black text-white font-medium hover:bg-blue-600"
-            >
-              Login
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col items-center gap-4 sm:gap-6 text-center">
-        <h1 className="text-5xl sm:text-7xl font-bold pt-32 sm:pt-48">
-          Connect, Inspire, Succeed
-        </h1>
-        <p className="sm:w-3/4 sm:text-xl">
-          Browse and share student resumes to unlock opportunities and be
-          inspired by the journeys of your peers
-        </p>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center text-gray-800">
+      <div className="flex flex-row gap-12 pt-48">
         <Link
-          to="/app/select"
-          className="px-4 w-1/2 sm:w-1/3 py-4 mt-6 rounded bg-black text-white font-medium hover:bg-gray-600"
+          to="/login"
+          className="px-4 py-2 rounded bg-blue-500 text-white font-medium hover:bg-blue-600"
         >
-          Get Started
+          Login
         </Link>
-        {/* <Link
-          to="/app/upload"
-          className="px-4 w-1/2 sm:w-1/3 py-4 mt-6 rounded bg-black text-white font-medium hover:bg-gray-600"
+        <Link
+          to="/signup"
+          className="px-4 py-2 rounded bg-green-500 text-white font-medium hover:bg-green-600"
         >
-          Admin Upload
-        </Link> */}
+          Sign Up
+        </Link>
+        <Link
+          to="/logout"
+          className="px-4 py-2 rounded bg-red-500 text-white font-medium hover:bg-red-600"
+        >
+          Logout
+        </Link>
+        <Link
+          to="/protected"
+          className="px-4 py-2 rounded bg-black text-white font-medium hover:bg-gray-600"
+        >
+          Protected
+        </Link>
+        <Link
+          to="/app"
+          className="px-4 py-2 rounded bg-purple-500 text-white font-medium hover:bg-purple-600"
+        >
+          App
+        </Link>
+      </div>
+      <h1 className="text-4xl font-bold mb-4 pt-10">
+        Welcome to Josiah's Stack
+      </h1>
+
+      <div className="bg-white p-6 rounded-lg shadow mt-6">
+        <ul className="space-y-3 text-lg text-gray-700">
+          <li>
+            <strong>Hosting</strong>: Cloudflare Pages
+          </li>
+          <li>
+            <strong>Javascript Framework</strong>: Remix
+          </li>
+          <li>
+            <strong>CSS Framework</strong>: TailwindCSS
+          </li>
+          <li>
+            <strong>Database</strong>: Cloudflare D1
+          </li>
+          <li>
+            <strong>Bucket Storage</strong>: Cloudflare R2
+          </li>
+          <li>
+            <strong>Serverless Functions</strong>: Cloudflare Workers
+          </li>
+          <li>
+            <strong>ORM</strong>: Drizzle
+          </li>
+          <li>
+            <strong>Auth</strong>: Lucia
+          </li>
+          <li>
+            <strong>Build Tool</strong>: Vite
+          </li>
+        </ul>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow mt-6">
+        <h3 className="font-semibold text-2xl">Onboarding Steps</h3>
+        <ul className="list-decimal list-inside mt-4 space-y-2">
+          <li>Install dependencies: pnpm i</li>
+          <li>Authenticate Wrangler: wrangler login</li>
+          <li>Set D1 and R2 in wrangler.toml: /wrangler.toml</li>
+          <li>Set wrangler types: "wrangler types"</li>
+          <li>Create Schemas: /app/drizzle/schema.server.ts</li>
+          <li>Migrate changes to local db: "db:migrate:local"</li>
+          <li>Migrate changes to remote db: "db:migrate"</li>
+        </ul>
       </div>
     </div>
   );
