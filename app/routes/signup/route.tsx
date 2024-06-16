@@ -12,64 +12,9 @@ import { Users } from "~/drizzle/schema.server";
 
 
 
-export async function action({ context, request }: ActionFunctionArgs) {
-  const db = drizzle(context.cloudflare.env.DB);
-  const lucia = initializeLucia(context.cloudflare.env.DB);
 
-  const formData = await request.formData();
 
-  const username = formData.get("username");
-  // username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
-  // keep in mind some database (e.g. mysql) are case insensitive
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
-    return json({
-      error: "Invalid username",
-    });
-  }
-  const password = formData.get("password");
-  if (
-    typeof password !== "string" ||
-    password.length < 6 ||
-    password.length > 255
-  ) {
-    return json({
-      error: "Invalid password",
-    });
-  }
-
-  const userId = generateId(15);
-  if (
-    username &&
-    password &&
-    typeof username === "string" &&
-    typeof password === "string"
-  ) {
-    await db
-      .insert(Users)
-      .values({
-        id: userId,
-        username: username as string,
-        password: password as string,
-      })
-      .execute();
-  }
-
-  const session = await lucia.createSession(userId, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  return redirect("/app/select", {
-    headers: {
-      "Set-Cookie": sessionCookie.serialize(),
-    },
-  });
-}
-
-export default function LoginRoute() {
+export default function SignUpRoute() {
   const actionData = useActionData<typeof action>();
 
   return (
@@ -125,4 +70,62 @@ export default function LoginRoute() {
       </Link>
     </div>
   );
+}
+
+
+export async function action({ context, request }: ActionFunctionArgs) {
+  const db = drizzle(context.cloudflare.env.DB);
+  const lucia = initializeLucia(context.cloudflare.env.DB);
+
+  const formData = await request.formData();
+
+  const username = formData.get("username");
+  // username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
+  // keep in mind some database (e.g. mysql) are case insensitive
+  if (
+    typeof username !== "string" ||
+    username.length < 3 ||
+    username.length > 31 ||
+    !/^[a-z0-9_-]+$/.test(username)
+  ) {
+    return json({
+      error: "Invalid username",
+    });
+  }
+  const password = formData.get("password");
+  if (
+    typeof password !== "string" ||
+    password.length < 6 ||
+    password.length > 255
+  ) {
+    return json({
+      error: "Invalid password",
+    });
+  }
+
+  const userId = generateId(15);
+  if (
+    username &&
+    password &&
+    typeof username === "string" &&
+    typeof password === "string"
+  ) {
+    await db
+      .insert(Users)
+      .values({
+        id: userId,
+        username: username as string,
+        password: password as string,
+      })
+      .execute();
+  }
+
+  const session = await lucia.createSession(userId, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+
+  return redirect("/app/select", {
+    headers: {
+      "Set-Cookie": sessionCookie.serialize(),
+    },
+  });
 }
