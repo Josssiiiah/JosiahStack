@@ -16,9 +16,10 @@ export const students = sqliteTable("students", {
 
 // Auth
 export const Users = sqliteTable("Users", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey().notNull(),
   username: text("username").notNull(),
-  password: text("password").notNull(),
+  password: text("password"),
+  github_id: text("github_id"),
 });
 
 export const session = sqliteTable("session", {

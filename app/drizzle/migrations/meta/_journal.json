@@ -141,6 +141,41 @@
       "when": 1716317091982,
       "tag": "0019_mighty_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1718506446958,
+      "tag": "0020_lazy_catseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1718517451168,
+      "tag": "0021_clumsy_gunslinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1718517508963,
+      "tag": "0022_early_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1718517548742,
+      "tag": "0023_sloppy_luke_cage",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1718517557481,
+      "tag": "0024_absent_paibok",
+      "breakpoints": true
     }
   ]
 }
