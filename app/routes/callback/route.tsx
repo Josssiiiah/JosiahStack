@@ -25,12 +25,14 @@ const githubOAuthStateCookie = createCookie("github_oauth_state", {
 export const loader: LoaderFunction = async ({ request, context }) => {
     console.log("Loader function triggered");
     console.log("Request method:", request.method);
-
-    const url = new URL(request.url);
-    const code = url.searchParams.get("code");
-    const state = url.searchParams.get("state");
     const lucia = initializeLucia(context.cloudflare.env.DB);
     const db = drizzle(context.cloudflare.env.DB);
+
+    const url = new URL(request.url);
+    console.log("Callback URL:", url);
+    const code = url.searchParams.get("code");
+    const state = url.searchParams.get("state");
+  
 
     const cookieHeader = request.headers.get("Cookie");
     console.log("Cookie header:", cookieHeader);  // Log the raw cookie header
@@ -48,17 +50,22 @@ export const loader: LoaderFunction = async ({ request, context }) => {
     }
     console.log("Parsed cookies:", cookies);  // Log the parsed cookies object
 
-    const storedState = cookies["github_oauth_state"] ?? null;
-    console.log("Stored state:", storedState);
+    let storedState = cookies["github_oauth_state"] ?? null;
+
+    
+    console.log("Stored State before decoding:", storedState);
+
+    if (storedState) {
+        storedState = decodeURIComponent(storedState);  // Decode the stored state
+    }    console.log("This is the stored state:", storedState);
 
     console.log("Code:", code);
     console.log("State:", state);
-    console.log("Stored State:", storedState);
 
-    // if (!code || !state || !storedState || state !== storedState) {
-    //     console.error("Invalid code/state or state mismatch");
-    //     return new Response(null, { status: 400 });
-    // }
+    if (!code || !state || !storedState || state !== storedState) {
+        console.error("Invalid code/state or state mismatch");
+        return new Response(null, { status: 400 });
+    }
 
     try {
         const tokens = await github.validateAuthorizationCode(!code ? "" : code);

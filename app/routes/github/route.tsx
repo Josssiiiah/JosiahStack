@@ -14,6 +14,7 @@ const githubOAuthStateCookie = createCookie("github_oauth_state", {
 export const loader: LoaderFunction = async ({ request }) => {
   const state = generateState();
   const url = await github.createAuthorizationURL(state);
+  console.log("Girhub OAuth URL:", url);
 
   // Set the cookie
   return redirect(String(url), {
