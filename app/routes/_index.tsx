@@ -81,6 +81,7 @@ export default function Index() {
           <li>Create Schemas: /app/drizzle/schema.server.ts</li>
           <li>Migrate changes to local db: "db:migrate:local"</li>
           <li>Migrate changes to remote db: "db:migrate"</li>
+          <li>REconfigure auth (Set up new Github and Google OAuth apps)</li>
         </ul>
       </div>
     </div>
