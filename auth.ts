@@ -42,6 +42,6 @@ export const github = new GitHub(process.env.GITHUB_CLIENT_ID!, process.env.GITH
 
 const clientId = process.env.GOOGLE_CLIENT_ID!;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET!;
-const redirectURI = process.env.REDIRECT_URI!;
+const redirectURI = "http://localhost:5173/googleredirect";
 
 export const google = new Google(clientId, clientSecret, redirectURI);
