@@ -4,7 +4,6 @@ import { createCookie } from "@remix-run/cloudflare";
 import { OAuth2RequestError } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
 import { initializeLucia } from "auth";
-import { parseCookies } from "oslo/cookie";
 import { Users } from "~/drizzle/schema.server";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
@@ -12,7 +11,7 @@ import { eq } from "drizzle-orm";
 interface GitHubUser {
   id: string;
   login: string;
-}
+};
 
 // Define the githubOAuthStateCookie
 const githubOAuthStateCookie = createCookie("github_oauth_state", {
@@ -23,8 +22,6 @@ const githubOAuthStateCookie = createCookie("github_oauth_state", {
 });
 
 export const loader: LoaderFunction = async ({ request, context }) => {
-  console.log("Loader function triggered");
-  console.log("Request method:", request.method);
   const db = drizzle(context.cloudflare.env.DB);
   const lucia = initializeLucia(context.cloudflare.env.DB);
 
@@ -32,26 +29,17 @@ export const loader: LoaderFunction = async ({ request, context }) => {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
 
-  // Log the callback URL and state for debugging
-  console.log("Callback URL:", url.href);
-  console.log("State from URL:", state);
-
   // Retrieve the stored state from the cookie using githubOAuthStateCookie
   const cookieHeader = request.headers.get("Cookie");
-  console.log("Cookie header:", cookieHeader);  // Log the raw cookie header
 
   const storedState = cookieHeader
     ? await githubOAuthStateCookie.parse(cookieHeader)
     : null;
 
-  console.log("Stored state from cookie:", storedState);
-
   if (!code || !state || !storedState || state !== storedState) {
     console.error("Invalid code/state or state mismatch");
     return new Response(null, { status: 400 });
   }
-
-  console.log("MATCHING MATCHING MATCHING MATHING")
 
   try {
     const tokens = await github.validateAuthorizationCode(code);
@@ -104,4 +92,4 @@ export const loader: LoaderFunction = async ({ request, context }) => {
 export default function Callback() {
   console.log("Component rendered");
   return <div>Hello</div>;
-}
+};

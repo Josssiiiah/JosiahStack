@@ -176,6 +176,13 @@
       "when": 1718517557481,
       "tag": "0024_absent_paibok",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "5",
+      "when": 1718592551297,
+      "tag": "0025_sudden_talisman",
+      "breakpoints": true
     }
   ]
 }

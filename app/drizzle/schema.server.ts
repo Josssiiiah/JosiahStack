@@ -20,6 +20,9 @@ export const Users = sqliteTable("Users", {
   username: text("username").notNull(),
   password: text("password"),
   github_id: text("github_id"),
+  google_id: text("google_id"),
+  email: text("email"),
+  avatar_url: text("avatar_url"),
 });
 
 export const session = sqliteTable("session", {

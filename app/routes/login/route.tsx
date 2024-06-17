@@ -76,6 +76,12 @@ export default function LoginRoute() {
         <Button>
           <a href="/github">Sign in with GitHub</a>
         </Button>
+        <h1>
+          Login with Google
+        </h1>
+        <Button>
+          <a href="/google">Sign in with Google</a>
+        </Button>
 
         <div className="mt-4">
           <Link to="/signup" className="text-blue-500 hover:underline">
@@ -122,9 +128,6 @@ export async function action({ context, request }: ActionFunctionArgs) {
     });
   }
 
-  // const existingUser = db
-  //     .prepare("SELECT * FROM user WHERE username = ?")
-  //     .get(username) as DatabaseUser | undefined;
   const existingUser = await db
     .select()
     .from(Users)
